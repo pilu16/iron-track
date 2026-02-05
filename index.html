@@ -1028,6 +1028,11 @@
         let selectedLocation = 'Tous'; // Filter: Tous, Maison, Salle
         let timerInterval = null;
         let timerSeconds = 0;
+        let userSettings = JSON.parse(localStorage.getItem('irontrack_settings')) || {
+    showVideos: true,
+    showDescriptions: true
+};
+let currentView = 'home';
         
         function startRestTimer(seconds) {
             if (timerInterval) clearInterval(timerInterval);
@@ -1105,7 +1110,56 @@
             };
             input.click();
         }
-        
+        function toggleMenu() {
+    const menu = document.querySelector('.dropdown-menu');
+    const overlay = document.querySelector('.menu-overlay');
+    const hamburger = document.querySelector('.hamburger-menu');
+    
+    menu.classList.toggle('open');
+    overlay.classList.toggle('active');
+    hamburger.classList.toggle('open');
+}
+
+function navigateTo(view) {
+    currentView = view;
+    toggleMenu();
+    
+    document.getElementById('homeView').style.display = 'none';
+    document.getElementById('trainingView').style.display = 'none';
+    document.getElementById('settingsView').style.display = 'none';
+    
+    if (view === 'home') {
+        renderHome();
+    } else if (view === 'settings') {
+        renderSettings();
+    }
+}
+
+function renderSettings() {
+    document.getElementById('settingsView').style.display = 'block';
+    document.getElementById('headerActions').innerHTML = '';
+    
+    const toggleVideos = document.getElementById('toggleVideos');
+    const toggleDescriptions = document.getElementById('toggleDescriptions');
+    
+    if (userSettings.showVideos) {
+        toggleVideos.classList.add('active');
+    } else {
+        toggleVideos.classList.remove('active');
+    }
+    
+    if (userSettings.showDescriptions) {
+        toggleDescriptions.classList.add('active');
+    } else {
+        toggleDescriptions.classList.remove('active');
+    }
+}
+
+function toggleSetting(setting) {
+    userSettings[setting] = !userSettings[setting];
+    localStorage.setItem('irontrack_settings', JSON.stringify(userSettings));
+    renderSettings();
+}
         function renderHome() {
             document.getElementById('homeView').style.display = 'block';
             document.getElementById('trainingView').style.display = 'none';
