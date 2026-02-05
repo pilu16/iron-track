@@ -1241,7 +1241,7 @@ function toggleSetting(setting) {
         
         function renderTrainingSession(session, workout) {
             const container = document.getElementById('trainingContent');
-            const showVideos = session.showVideos !== false;
+            const showVideos = userSettings.showVideos && session.showVideos !== false;
             
             const exercisesHtml = workout.exercises.map((ex, exIdx) => {
                 const exerciseData = exerciseDatabase.find(e => e.name === ex.name);
@@ -1315,6 +1315,7 @@ function toggleSetting(setting) {
                                     </span>
                                 </div>` : ''}
                             </div>
+                            ${userSettings.showDescriptions && exerciseData?.description ? `<div class="exercise-description">${exerciseData.description}</div>` : ''}
                         </div>
                         <div class="sets-container">
                             ${setsHtml}
