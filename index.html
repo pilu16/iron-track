@@ -868,7 +868,38 @@
             <div id="sessionsList"></div>
         </div>
     </div>
-    
+    <!-- Vue Paramètres -->
+<div id="settingsView" class="settings-view">
+    <div class="container">
+        <h1 style="font-family: 'Oswald', sans-serif; font-size: 28px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px;">
+            ⚙️ PARAMÈTRES
+        </h1>
+        
+        <div class="settings-section">
+            <div class="settings-title">♿ Accessibilité</div>
+            
+            <div class="settings-option">
+                <div>
+                    <div class="settings-label">Afficher les vidéos</div>
+                    <div class="settings-description">Boutons vidéos pendant l'entraînement</div>
+                </div>
+                <div class="toggle-switch" id="toggleVideos" onclick="toggleSetting('showVideos')">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="settings-option">
+                <div>
+                    <div class="settings-label">Mode débutant</div>
+                    <div class="settings-description">Descriptions des exercices pendant l'entraînement</div>
+                </div>
+                <div class="toggle-switch" id="toggleDescriptions" onclick="toggleSetting('showDescriptions')">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <!-- Vue: Entraînement -->
     <div id="trainingView" style="display: none;">
         <div class="container">
