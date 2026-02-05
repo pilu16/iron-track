@@ -819,12 +819,17 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">IRON TRACK</div>
-        <div id="headerActions">
-            <button class="header-btn" onclick="openCreateModal()">+ Créer</button>
+ <div class="header">
+    <div class="logo">Iron Track</div>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <div id="headerActions"></div>
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
         </div>
     </div>
+</div>
     
     <!-- Vue: Accueil -->
     <div id="homeView">
