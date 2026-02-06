@@ -1260,11 +1260,8 @@ function toggleSetting(setting) {
         function renderHome() {
             document.getElementById('homeView').style.display = 'block';
             document.getElementById('trainingView').style.display = 'none';
-          document.getElementById('headerActions').innerHTML = `
-    <button class="header-btn" onclick="openCreateModal()">
-        + Créer
-    </button>
-`;
+            document.getElementById('settingsView').style.display = 'none';
+            document.getElementById('headerActions').innerHTML = `
                 <button class="header-btn" onclick="openCreateModal()">
                     + Créer
                 </button>
