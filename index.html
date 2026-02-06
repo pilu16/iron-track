@@ -795,6 +795,81 @@
     background: rgba(0,0,0,0.3);
     border-left: 3px solid var(--blood);
     font-style: italic;
+
+/* Menu 3 points sur les cartes */
+.session-card {
+    position: relative;
+}
+
+.session-card-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.three-dots-menu {
+    position: relative;
+}
+
+.three-dots-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: all 0.3s;
+}
+
+.three-dots-btn:hover {
+    color: var(--blood);
+    transform: scale(1.2);
+}
+
+.dropdown-card-menu {
+    position: absolute;
+    top: 35px;
+    right: 0;
+    background: var(--steel);
+    border: 2px solid var(--blood);
+    border-radius: 4px;
+    min-width: 180px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 50;
+}
+
+.dropdown-card-menu.active {
+    display: block;
+}
+
+.dropdown-card-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--iron);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown-card-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-card-item:hover {
+    background: var(--iron);
+    padding-left: 25px;
+}
+
+.dropdown-card-item.delete {
+    color: var(--blood);
+}
 }
         input[type="checkbox"] {
             width: 20px;
