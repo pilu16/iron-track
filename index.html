@@ -1247,11 +1247,14 @@ function navigateTo(view) {
     document.getElementById('homeView').style.display = 'none';
     document.getElementById('trainingView').style.display = 'none';
     document.getElementById('settingsView').style.display = 'none';
+    document.getElementById('statsView').style.display = 'none';
     
     if (view === 'home') {
         renderHome();
     } else if (view === 'settings') {
         renderSettings();
+    } else if (view === 'stats') {
+        renderStats();
     }
 }
 
