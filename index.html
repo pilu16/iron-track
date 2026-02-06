@@ -1428,6 +1428,7 @@ function renderSettings() {
             </div>
         `;
     } else {
+        renderCharts();
         showMeasurementsHistory();
     }
 }
@@ -1575,7 +1576,7 @@ function showMeasurementsHistory() {
                         </div>
                     ` : ''}
                 </div>
-                <button class="btn btn-delete" onclick="deleteMeasurement('${m.id}')" style="margin-top: 15px; padding: 8px 15px; font-size: 11px;">
+                <button class="btn btn-" onclick="Measurement('${m.id}')" style="margin-top: 15px; padding: 8px 15px; font-size: 11px;">
                     🗑️ Supprimer
                 </button>
             </div>
@@ -1592,7 +1593,142 @@ function deleteMeasurement(id) {
     localStorage.setItem('irontrack_measurements', JSON.stringify(measurements));
     renderStats();
 }
-
+function renderCharts() {
+    // Trier par date croissante pour les graphiques
+    const sortedMeasurements = [...measurements].sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    const dates = sortedMeasurements.map(m => new Date(m.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }));
+    
+    // Graphique Poids
+    const weightData = sortedMeasurements.map(m => m.weight).filter(w => w !== null);
+    if (weightData.length > 0) {
+        const ctx1 = document.getElementById('weightChart');
+        if (window.weightChartInstance) window.weightChartInstance.destroy();
+        window.weightChartInstance = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: dates.slice(0, weightData.length),
+                datasets: [{
+                    label: 'Poids (kg)',
+                    data: weightData,
+                    borderColor: '#ff0000',
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: false,
+                        ticks: { color: '#f5f5f5' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    },
+                    x: { 
+                        ticks: { color: '#f5f5f5' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Graphique % Gras
+    const bodyFatData = sortedMeasurements.map(m => m.bodyFat).filter(bf => bf !== null);
+    if (bodyFatData.length > 0) {
+        const ctx2 = document.getElementById('bodyFatChart');
+        if (window.bodyFatChartInstance) window.bodyFatChartInstance.destroy();
+        window.bodyFatChartInstance = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: dates.slice(0, bodyFatData.length),
+                datasets: [{
+                    label: '% Masse grasse',
+                    data: bodyFatData,
+                    borderColor: '#ff0000',
+                    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: false,
+                        ticks: { color: '#f5f5f5' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    },
+                    x: { 
+                        ticks: { color: '#f5f5f5' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Graphique Mensurations
+    const mensurationLabels = ['Épaules', 'Taille', 'Poitrine', 'Bras', 'Avant-bras', 'Fessiers', 'Cuisses', 'Mollets'];
+    const mensurationKeys = ['shoulders', 'waist', 'chest', 'arms', 'forearms', 'glutes', 'thighs', 'calves'];
+    
+    const datasets = mensurationKeys.map((key, idx) => {
+        const data = sortedMeasurements.map(m => m.mensurations[key]).filter(v => v !== null);
+        if (data.length === 0) return null;
+        
+        const colors = ['#ff0000', '#ff3333', '#ff6666', '#ff9999', '#ffcccc', '#cc0000', '#990000', '#660000'];
+        
+        return {
+            label: mensurationLabels[idx],
+            data: data,
+            borderColor: colors[idx],
+            backgroundColor: colors[idx] + '33',
+            tension: 0.4
+        };
+    }).filter(d => d !== null);
+    
+    if (datasets.length > 0) {
+        const ctx3 = document.getElementById('mensurationsChart');
+        if (window.mensurationsChartInstance) window.mensurationsChartInstance.destroy();
+        window.mensurationsChartInstance = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { 
+                        display: true,
+                        labels: { color: '#f5f5f5' }
+                    }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: false,
+                        ticks: { color: '#f5f5f5' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    },
+                    x: { 
+                        ticks: { color: '#f5f5f5' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    }
+                }
+            }
+        });
+    }
+}
 function toggleSetting(setting) {
     userSettings[setting] = !userSettings[setting];
     localStorage.setItem('irontrack_settings', JSON.stringify(userSettings));
