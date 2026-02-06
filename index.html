@@ -1188,6 +1188,25 @@ let currentView = 'home';
             };
             input.click();
         }
+        function toggleCardMenu(sessionId) {
+    const menu = document.getElementById(`menu-${sessionId}`);
+    const allMenus = document.querySelectorAll('.dropdown-card-menu');
+    
+    // Fermer tous les autres menus
+    allMenus.forEach(m => {
+        if (m.id !== `menu-${sessionId}`) {
+            m.classList.remove('active');
+        }
+    });
+    
+    // Toggle le menu cliqué
+    menu.classList.toggle('active');
+}
+
+function closeCardMenu() {
+    const allMenus = document.querySelectorAll('.dropdown-card-menu');
+    allMenus.forEach(m => m.classList.remove('active'));
+}
         function toggleMenu() {
     const menu = document.querySelector('.dropdown-menu');
     const overlay = document.querySelector('.menu-overlay');
@@ -1803,6 +1822,12 @@ function toggleSetting(setting) {
                     .catch(err => console.log('Erreur Service Worker:', err));
             });
         }
+        // Fermer les menus si on clique ailleurs
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.three-dots-menu')) {
+        closeCardMenu();
+    }
+});
     </script>
 </body>
 </html>
