@@ -1236,6 +1236,7 @@
     showDescriptions: true
 };
 let currentView = 'home';
+        let measurements = JSON.parse(localStorage.getItem('irontrack_measurements')) || [];
         
         function startRestTimer(seconds) {
             if (timerInterval) clearInterval(timerInterval);
@@ -1378,6 +1379,187 @@ function renderSettings() {
     } else {
         toggleDescriptions.classList.remove('active');
     }
+}
+        function renderStats() {
+    document.getElementById('statsView').style.display = 'block';
+    document.getElementById('headerActions').innerHTML = '';
+    
+    const content = document.getElementById('statsContent');
+    
+    if (measurements.length === 0) {
+        content.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📊</div>
+                <div class="empty-state-text">Aucune mesure enregistrée</div>
+                <div style="margin-top: 10px; color: rgba(255,255,255,0.3); font-size: 14px;">
+                    Clique sur "+ Ajouter une mesure" pour commencer
+                </div>
+            </div>
+        `;
+    } else {
+        showMeasurementsHistory();
+    }
+}
+
+function openMeasurementModal() {
+    const modal = document.getElementById('measurementModal');
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('measurementDate').value = today;
+    
+    // Reset tous les champs
+    document.getElementById('measurementWeight').value = '';
+    document.getElementById('measurementBodyFat').value = '';
+    document.getElementById('measurementShoulders').value = '';
+    document.getElementById('measurementWaist').value = '';
+    document.getElementById('measurementChest').value = '';
+    document.getElementById('measurementArms').value = '';
+    document.getElementById('measurementForearms').value = '';
+    document.getElementById('measurementGlutes').value = '';
+    document.getElementById('measurementThighs').value = '';
+    document.getElementById('measurementCalves').value = '';
+    
+    modal.classList.add('active');
+}
+
+function closeMeasurementModal() {
+    document.getElementById('measurementModal').classList.remove('active');
+}
+
+function saveMeasurement() {
+    const date = document.getElementById('measurementDate').value;
+    const weight = parseFloat(document.getElementById('measurementWeight').value) || null;
+    const bodyFat = parseFloat(document.getElementById('measurementBodyFat').value) || null;
+    const shoulders = parseFloat(document.getElementById('measurementShoulders').value) || null;
+    const waist = parseFloat(document.getElementById('measurementWaist').value) || null;
+    const chest = parseFloat(document.getElementById('measurementChest').value) || null;
+    const arms = parseFloat(document.getElementById('measurementArms').value) || null;
+    const forearms = parseFloat(document.getElementById('measurementForearms').value) || null;
+    const glutes = parseFloat(document.getElementById('measurementGlutes').value) || null;
+    const thighs = parseFloat(document.getElementById('measurementThighs').value) || null;
+    const calves = parseFloat(document.getElementById('measurementCalves').value) || null;
+    
+    if (!date) {
+        alert('La date est obligatoire !');
+        return;
+    }
+    
+    const measurement = {
+        id: Date.now().toString(),
+        date: date,
+        weight: weight,
+        bodyFat: bodyFat,
+        mensurations: {
+            shoulders: shoulders,
+            waist: waist,
+            chest: chest,
+            arms: arms,
+            forearms: forearms,
+            glutes: glutes,
+            thighs: thighs,
+            calves: calves
+        }
+    };
+    
+    measurements.push(measurement);
+    measurements.sort((a, b) => new Date(b.date) - new Date(a.date));
+    localStorage.setItem('irontrack_measurements', JSON.stringify(measurements));
+    
+    closeMeasurementModal();
+    renderStats();
+}
+
+function showMeasurementsHistory() {
+    const content = document.getElementById('statsContent');
+    
+    const html = measurements.map(m => {
+        const date = new Date(m.date).toLocaleDateString('fr-FR', { 
+            weekday: 'long', 
+            day: 'numeric', 
+            month: 'long', 
+            year: 'numeric' 
+        });
+        
+        return `
+            <div class="stats-card">
+                <div class="stats-date">${date}</div>
+                <div class="stats-grid">
+                    ${m.weight ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Poids</div>
+                            <div class="stat-value">${m.weight} kg</div>
+                        </div>
+                    ` : ''}
+                    ${m.bodyFat ? `
+                        <div class="stat-item">
+                            <div class="stat-label">% Gras</div>
+                            <div class="stat-value">${m.bodyFat}%</div>
+                        </div>
+                    ` : ''}
+                    ${m.mensurations.shoulders ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Épaules</div>
+                            <div class="stat-value">${m.mensurations.shoulders} cm</div>
+                        </div>
+                    ` : ''}
+                    ${m.mensurations.waist ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Taille</div>
+                            <div class="stat-value">${m.mensurations.waist} cm</div>
+                        </div>
+                    ` : ''}
+                    ${m.mensurations.chest ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Poitrine</div>
+                            <div class="stat-value">${m.mensurations.chest} cm</div>
+                        </div>
+                    ` : ''}
+                    ${m.mensurations.arms ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Bras</div>
+                            <div class="stat-value">${m.mensurations.arms} cm</div>
+                        </div>
+                    ` : ''}
+                    ${m.mensurations.forearms ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Avant-bras</div>
+                            <div class="stat-value">${m.mensurations.forearms} cm</div>
+                        </div>
+                    ` : ''}
+                    ${m.mensurations.glutes ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Fessiers</div>
+                            <div class="stat-value">${m.mensurations.glutes} cm</div>
+                        </div>
+                    ` : ''}
+                    ${m.mensurations.thighs ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Cuisses</div>
+                            <div class="stat-value">${m.mensurations.thighs} cm</div>
+                        </div>
+                    ` : ''}
+                    ${m.mensurations.calves ? `
+                        <div class="stat-item">
+                            <div class="stat-label">Mollets</div>
+                            <div class="stat-value">${m.mensurations.calves} cm</div>
+                        </div>
+                    ` : ''}
+                </div>
+                <button class="btn btn-delete" onclick="deleteMeasurement('${m.id}')" style="margin-top: 15px; padding: 8px 15px; font-size: 11px;">
+                    🗑️ Supprimer
+                </button>
+            </div>
+        `;
+    }).join('');
+    
+    content.innerHTML = html;
+}
+
+function deleteMeasurement(id) {
+    if (!confirm('Supprimer cette mesure ?')) return;
+    
+    measurements = measurements.filter(m => m.id !== id);
+    localStorage.setItem('irontrack_measurements', JSON.stringify(measurements));
+    renderStats();
 }
 
 function toggleSetting(setting) {
