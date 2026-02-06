@@ -795,81 +795,6 @@
     background: rgba(0,0,0,0.3);
     border-left: 3px solid var(--blood);
     font-style: italic;
-
-/* Menu 3 points sur les cartes */
-.session-card {
-    position: relative;
-}
-
-.session-card-content {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-}
-
-.three-dots-menu {
-    position: relative;
-}
-
-.three-dots-btn {
-    background: transparent;
-    border: none;
-    color: rgba(255,255,255,0.5);
-    font-size: 24px;
-    cursor: pointer;
-    padding: 5px 10px;
-    transition: all 0.3s;
-}
-
-.three-dots-btn:hover {
-    color: var(--blood);
-    transform: scale(1.2);
-}
-
-.dropdown-card-menu {
-    position: absolute;
-    top: 35px;
-    right: 0;
-    background: var(--steel);
-    border: 2px solid var(--blood);
-    border-radius: 4px;
-    min-width: 180px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    display: none;
-    z-index: 50;
-}
-
-.dropdown-card-menu.active {
-    display: block;
-}
-
-.dropdown-card-item {
-    padding: 12px 20px;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid var(--iron);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.dropdown-card-item:last-child {
-    border-bottom: none;
-}
-
-.dropdown-card-item:hover {
-    background: var(--iron);
-    padding-left: 25px;
-}
-
-.dropdown-card-item.delete {
-    color: var(--blood);
-}
 }
         input[type="checkbox"] {
             width: 20px;
@@ -962,19 +887,6 @@
                     <div class="toggle-slider"></div>
                 </div>
             </div>
-
-            </div>  
-
-<div class="settings-section">
-    <div class="settings-title">📂 Gestion des données</div>
-    
-    <div class="settings-option" onclick="importSession()" style="cursor: pointer;">
-        <div>
-            <div class="settings-label">↓ Importer une séance</div>
-            <div class="settings-description">Charger une séance depuis un fichier</div>
-        </div>
-    </div>
-</div>
             
             <div class="settings-option">
                 <div>
@@ -1247,32 +1159,6 @@ function toggleSetting(setting) {
     userSettings[setting] = !userSettings[setting];
     localStorage.setItem('irontrack_settings', JSON.stringify(userSettings));
     renderSettings();
-    function toggleCardMenu(sessionId) {
-    const menu = document.getElementById(`menu-${sessionId}`);
-    const allMenus = document.querySelectorAll('.dropdown-card-menu');
-    
-    // Fermer tous les autres menus
-    allMenus.forEach(m => {
-        if (m.id !== `menu-${sessionId}`) {
-            m.classList.remove('active');
-        }
-    });
-    
-    // Toggle le menu cliqué
-    menu.classList.toggle('active');
-}
-
-function closeCardMenu() {
-    const allMenus = document.querySelectorAll('.dropdown-card-menu');
-    allMenus.forEach(m => m.classList.remove('active'));
-}
-
-// Fermer les menus si on clique ailleurs
-document.addEventListener('click', function(e) {
-    if (!e.target.closest('.three-dots-menu')) {
-        closeCardMenu();
-    }
-});
 }
         function renderHome() {
             document.getElementById('homeView').style.display = 'block';
@@ -1299,38 +1185,27 @@ document.addEventListener('click', function(e) {
                     </div>
                 `;
             } else {
-               container.innerHTML = sessions.map((session) => {
-    const history = workoutHistory.filter(h => h.sessionId === session.id);
-    const lastWorkout = history.length > 0 ? new Date(history[0].date).toLocaleDateString('fr-FR') : 'Jamais';
-    
-    return `
-        <div class="session-card">
-            <div class="session-card-content" onclick="openSession('${session.id}')">
-                <div class="session-info">
-                    <div class="session-name">${session.name}</div>
-                    <div class="session-details">
-                        ${session.exercises.length} exercices • Dernière: ${lastWorkout}
-                    </div>
-                </div>
-                <div class="session-arrow">▶</div>
-            </div>
-            <div class="three-dots-menu">
-                <button class="three-dots-btn" onclick="event.stopPropagation(); toggleCardMenu('${session.id}')">⋮</button>
-                <div class="dropdown-card-menu" id="menu-${session.id}">
-                    <div class="dropdown-card-item" onclick="event.stopPropagation(); closeCardMenu(); openEditModal('${session.id}')">
-                        ✏️ Modifier
-                    </div>
-                    <div class="dropdown-card-item" onclick="event.stopPropagation(); closeCardMenu(); exportSession('${session.id}')">
-                        ↑ Exporter
-                    </div>
-                    <div class="dropdown-card-item delete" onclick="event.stopPropagation(); closeCardMenu(); deleteSession('${session.id}')">
-                        🗑️ Supprimer
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}).join('');
+                container.innerHTML = sessions.map((session) => {
+                    const history = workoutHistory.filter(h => h.sessionId === session.id);
+                    const lastWorkout = history.length > 0 ? new Date(history[0].date).toLocaleDateString('fr-FR') : 'Jamais';
+                    
+                    return `
+                        <div class="session-card" style="position: relative;">
+                            <div onclick="openSession('${session.id}')" style="flex: 1; display: flex; justify-content: space-between; align-items: center;">
+                                <div class="session-info">
+                                    <div class="session-name">${session.name}</div>
+                                    <div class="session-details">
+                                        ${session.exercises.length} exercices • Dernière: ${lastWorkout}
+                                    </div>
+                                </div>
+                                <div class="session-arrow">▶</div>
+                            </div>
+                            <button onclick="event.stopPropagation(); exportSession('${session.id}')" 
+                                    style="position: absolute; top: 15px; right: 15px; background: transparent; border: 2px solid var(--blood); color: var(--blood); padding: 6px 12px; cursor: pointer; font-family: 'Oswald', sans-serif; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s;"
+                                    onmouseover="this.style.background='var(--blood)'; this.style.color='white'"
+                                    onmouseout="this.style.background='transparent'; this.style.color='var(--blood)'">
+                                ↑ Export
+                            </button>
                         </div>
                     `;
                 }).join('');
@@ -1347,10 +1222,6 @@ document.addEventListener('click', function(e) {
             document.getElementById('homeView').style.display = 'none';
             document.getElementById('trainingView').style.display = 'block';
             document.getElementById('headerActions').innerHTML = `
-            <button class="header-btn" onclick="openCreateModal()">
-        + Créer
-    </button>
-`;
                 <button class="header-btn back-btn" onclick="renderHome()">← Retour</button>
                 <button class="header-btn" onclick="openEditModal('${sessionId}')">Modifier</button>
             `;
