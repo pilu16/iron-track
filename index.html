@@ -851,6 +851,7 @@
     padding: 20px;
     margin-bottom: 15px;
     transition: all 0.3s;
+    min-height: 100px;
 }
 
 .stats-card:hover {
@@ -862,18 +863,24 @@
     font-size: 18px;
     color: var(--blood);
     margin-bottom: 15px;
+    display: block;
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 10px;
+    margin-bottom: 15px;
 }
 
 .stat-item {
     background: rgba(0,0,0,0.3);
     padding: 10px;
     text-align: center;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .stat-label {
@@ -881,12 +888,14 @@
     text-transform: uppercase;
     color: rgba(255,255,255,0.5);
     margin-bottom: 5px;
+    display: block;
 }
 
 .stat-value {
     font-size: 20px;
     font-weight: 600;
     color: var(--chalk);
+    display: block;
 }
 .exercise-description {
     font-size: 13px;
