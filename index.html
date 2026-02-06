@@ -1247,6 +1247,30 @@ function toggleSetting(setting) {
     userSettings[setting] = !userSettings[setting];
     localStorage.setItem('irontrack_settings', JSON.stringify(userSettings));
     renderSettings();
+    function toggleMenu() {
+    const menu = document.querySelector('.dropdown-menu');
+    const overlay = document.querySelector('.menu-overlay');
+    const hamburger = document.querySelector('.hamburger-menu');
+    
+    menu.classList.toggle('open');
+    overlay.classList.toggle('active');
+    hamburger.classList.toggle('open');
+}
+
+function navigateTo(view) {
+    currentView = view;
+    toggleMenu();
+    
+    document.getElementById('homeView').style.display = 'none';
+    document.getElementById('trainingView').style.display = 'none';
+    document.getElementById('settingsView').style.display = 'none';
+    
+    if (view === 'home') {
+        renderHome();
+    } else if (view === 'settings') {
+        renderSettings();
+    }
+}
     function toggleCardMenu(sessionId) {
     const menu = document.getElementById(`menu-${sessionId}`);
     const allMenus = document.querySelectorAll('.dropdown-card-menu');
