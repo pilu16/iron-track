@@ -785,7 +785,109 @@
 .toggle-switch.active .toggle-slider {
     left: 27px;
 }
+/* Modal Mesures */
+.measurement-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 200;
+    display: none;
+    overflow-y: auto;
+    padding: 20px;
+}
 
+.measurement-modal.active {
+    display: block;
+}
+
+.measurement-form {
+    background: var(--steel);
+    border: 4px solid var(--blood);
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+}
+
+.measurement-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.measurement-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.measurement-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.7);
+}
+
+.measurement-input {
+    background: var(--concrete);
+    border: 2px solid var(--iron);
+    color: var(--chalk);
+    padding: 12px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.measurement-input:focus {
+    outline: none;
+    border-color: var(--blood);
+}
+
+.stats-card {
+    background: var(--steel);
+    border: 2px solid var(--iron);
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+}
+
+.stats-card:hover {
+    border-color: var(--blood);
+}
+
+.stats-date {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    color: var(--blood);
+    margin-bottom: 15px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.stat-item {
+    background: rgba(0,0,0,0.3);
+    padding: 10px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--chalk);
+}
 .exercise-description {
     font-size: 13px;
     color: rgba(255,255,255,0.7);
@@ -1861,5 +1963,77 @@ document.addEventListener('click', function(e) {
     }
 });
     </script>
+<!-- Modal Mesures -->
+<div id="measurementModal" class="measurement-modal">
+    <div class="measurement-form">
+        <h2 style="font-family: 'Oswald', sans-serif; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">
+            📏 Nouvelle mesure
+        </h2>
+        
+        <div class="measurement-input-group" style="margin-bottom: 20px;">
+            <label class="measurement-label">Date</label>
+            <input type="date" id="measurementDate" class="measurement-input" value="">
+        </div>
+        
+        <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px; color: var(--blood);">
+            💪 Données corporelles
+        </h3>
+        
+        <div class="measurement-grid">
+            <div class="measurement-input-group">
+                <label class="measurement-label">Poids (kg)</label>
+                <input type="number" step="0.1" id="measurementWeight" class="measurement-input" placeholder="75.5">
+            </div>
+            <div class="measurement-input-group">
+                <label class="measurement-label">% Masse grasse</label>
+                <input type="number" step="0.1" id="measurementBodyFat" class="measurement-input" placeholder="15.0">
+            </div>
+        </div>
+        
+        <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; margin: 25px 0 15px; color: var(--blood);">
+            📏 Mensurations (cm)
+        </h3>
+        
+        <div class="measurement-grid">
+            <div class="measurement-input-group">
+                <label class="measurement-label">Épaules</label>
+                <input type="number" step="0.1" id="measurementShoulders" class="measurement-input" placeholder="110">
+            </div>
+            <div class="measurement-input-group">
+                <label class="measurement-label">Taille</label>
+                <input type="number" step="0.1" id="measurementWaist" class="measurement-input" placeholder="80">
+            </div>
+            <div class="measurement-input-group">
+                <label class="measurement-label">Poitrine</label>
+                <input type="number" step="0.1" id="measurementChest" class="measurement-input" placeholder="100">
+            </div>
+            <div class="measurement-input-group">
+                <label class="measurement-label">Bras</label>
+                <input type="number" step="0.1" id="measurementArms" class="measurement-input" placeholder="35">
+            </div>
+            <div class="measurement-input-group">
+                <label class="measurement-label">Avant-bras</label>
+                <input type="number" step="0.1" id="measurementForearms" class="measurement-input" placeholder="28">
+            </div>
+            <div class="measurement-input-group">
+                <label class="measurement-label">Fessiers</label>
+                <input type="number" step="0.1" id="measurementGlutes" class="measurement-input" placeholder="95">
+            </div>
+            <div class="measurement-input-group">
+                <label class="measurement-label">Cuisses</label>
+                <input type="number" step="0.1" id="measurementThighs" class="measurement-input" placeholder="55">
+            </div>
+            <div class="measurement-input-group">
+                <label class="measurement-label">Mollets</label>
+                <input type="number" step="0.1" id="measurementCalves" class="measurement-input" placeholder="38">
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 30px;">
+            <button class="btn" onclick="saveMeasurement()">Enregistrer</button>
+            <button class="btn btn-secondary" onclick="closeMeasurementModal()">Annuler</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
