@@ -126,6 +126,160 @@
             margin: 20px;
             border: 2px solid var(--blood);
         }
+
+        .home-hero {
+            max-width: 900px;
+            margin: 20px auto 0;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(255,0,0,0.15), rgba(0,0,0,0.6));
+            border: 2px solid var(--blood);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.7);
+        }
+
+        .home-hero-main {
+            flex: 2;
+        }
+
+        .home-hero-aside {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .home-hero-tag {
+            font-family: 'Oswald', sans-serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 6px;
+        }
+
+        .home-hero-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 6px;
+        }
+
+        .home-hero-subtitle {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 16px;
+        }
+
+        .home-hero-last {
+            background: rgba(0,0,0,0.4);
+            border-left: 3px solid var(--blood);
+            padding: 10px 14px;
+            margin-bottom: 18px;
+        }
+
+        .hero-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.5);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .hero-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            display: block;
+        }
+
+        .hero-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .quick-action-btn {
+            flex: 1;
+            min-width: 130px;
+            padding: 10px 14px;
+            border: 2px solid var(--blood);
+            background: transparent;
+            color: var(--chalk);
+            font-family: 'Oswald', sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action-btn.primary {
+            background: var(--blood);
+            color: #ffffff;
+        }
+
+        .quick-action-btn:hover:not(:disabled) {
+            background: var(--blood);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(255,0,0,0.6);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-btn:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        .hero-metric-card {
+            background: var(--steel);
+            border: 2px solid var(--iron);
+            padding: 12px 14px;
+        }
+
+        .hero-metric-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 4px;
+        }
+
+        .hero-metric-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--blood);
+        }
+
+        .hero-metric-sub {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .home-hero {
+                flex-direction: column;
+            }
+
+            .home-hero-aside {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .hero-metric-card {
+                flex: 1;
+                min-width: 140px;
+            }
+        }
         
         .stat {
             background: var(--steel);
@@ -1134,6 +1288,63 @@ html { scroll-behavior: smooth; }
     
     <!-- Vue: Accueil -->
     <div id="homeView">
+        <div class="home-hero">
+            <div class="home-hero-main">
+                <div class="home-hero-tag">IRON TRACK • Coach cockpit</div>
+                <h1 class="home-hero-title">Prêt à soulever ?</h1>
+                <p class="home-hero-subtitle">
+                    Visualise ta dernière séance, ton poids actuel et lance l'entraînement en deux taps.
+                </p>
+
+                <div class="home-hero-last">
+                    <span class="hero-label">Dernière séance</span>
+                    <span class="hero-value" id="heroLastWorkoutName">Aucune séance</span>
+                    <span class="hero-sub" id="heroLastWorkoutDate">
+                        Commence avec ta première séance.
+                    </span>
+                </div>
+
+                <div class="quick-actions">
+                    <button
+                        class="quick-action-btn primary"
+                        onclick="document.getElementById('headerActions').querySelector('button') && document.getElementById('headerActions').querySelector('button').click()"
+                    >
+                        + Nouvelle séance
+                    </button>
+
+                    <button
+                        class="quick-action-btn"
+                        id="quickStartBtn"
+                        onclick="startLastSession()"
+                    >
+                        Lancer un entraînement
+                    </button>
+
+                    <button
+                        class="quick-action-btn"
+                        onclick="openMeasurementModal()"
+                    >
+                        Ajouter une mesure
+                    </button>
+                </div>
+            </div>
+
+            <div class="home-hero-aside">
+                <div class="hero-metric-card">
+                    <div class="hero-metric-label">Poids actuel</div>
+                    <div class="hero-metric-value" id="heroWeightValue">--</div>
+                    <div class="hero-metric-sub" id="heroWeightDate">
+                        Ajoute une première mesure
+                    </div>
+                </div>
+
+                <div class="hero-metric-card">
+                    <div class="hero-metric-label">Séances cette semaine</div>
+                    <div class="hero-metric-value" id="heroSessionsWeek">0</div>
+                </div>
+            </div>
+        </div>
+
         <div class="stats-bar">
             <div class="stat">
                 <div class="stat-label">Séances</div>
@@ -1358,11 +1569,96 @@ html { scroll-behavior: smooth; }
         let timerInterval = null;
         let timerSeconds = 0;
         let userSettings = JSON.parse(localStorage.getItem('irontrack_settings')) || {
-    showVideos: true,
-    showDescriptions: true
-};
-let currentView = 'home';
+            showVideos: true,
+            showDescriptions: true
+        };
+        let currentView = 'home';
         let measurements = JSON.parse(localStorage.getItem('irontrack_measurements')) || [];
+
+        function getSessionsThisWeek() {
+            if (!workoutHistory.length) return 0;
+
+            const now = new Date();
+            const day = now.getDay(); // 0 = dimanche
+            const diffToMonday = day === 0 ? -6 : 1 - day;
+            const monday = new Date(now);
+            monday.setDate(now.getDate() + diffToMonday);
+            monday.setHours(0, 0, 0, 0);
+
+            return workoutHistory.filter(h => {
+                const d = new Date(h.date);
+                return d >= monday && d <= now;
+            }).length;
+        }
+
+        function startLastSession() {
+            if (!sessions.length) return;
+
+            if (workoutHistory.length) {
+                const last = [...workoutHistory].sort(
+                    (a, b) => new Date(b.date) - new Date(a.date)
+                )[0];
+                const lastSession = sessions.find(s => s.id === last.sessionId);
+                if (lastSession) {
+                    openSession(lastSession.id);
+                    return;
+                }
+            }
+
+            openSession(sessions[0].id);
+        }
+
+        function updateHomeHero() {
+            let lastName = 'Aucune séance';
+            let lastDateText = 'Commence avec ta première séance.';
+            if (workoutHistory.length) {
+                const last = [...workoutHistory].sort(
+                    (a, b) => new Date(b.date) - new Date(a.date)
+                )[0];
+                const session = sessions.find(s => s.id === last.sessionId);
+                lastName = session ? session.name : 'Séance';
+                lastDateText = new Date(last.date).toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long'
+                });
+            }
+
+            const lastNameEl = document.getElementById('heroLastWorkoutName');
+            const lastDateEl = document.getElementById('heroLastWorkoutDate');
+            if (lastNameEl) lastNameEl.textContent = lastName;
+            if (lastDateEl) lastDateEl.textContent = lastDateText;
+
+            let weightValue = '--';
+            let weightDateText = 'Ajoute une première mesure';
+            if (measurements.length) {
+                const lastM = [...measurements].sort(
+                    (a, b) => new Date(b.date) - new Date(a.date)
+                )[0];
+                if (lastM.weight != null) {
+                    weightValue = `${lastM.weight} kg`;
+                }
+                weightDateText = new Date(lastM.date).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+
+            const weightValEl = document.getElementById('heroWeightValue');
+            const weightDateEl = document.getElementById('heroWeightDate');
+            if (weightValEl) weightValEl.textContent = weightValue;
+            if (weightDateEl) weightDateEl.textContent = weightDateText;
+
+            const weekCount = getSessionsThisWeek();
+            const weekEl = document.getElementById('heroSessionsWeek');
+            if (weekEl) weekEl.textContent = weekCount.toString();
+
+            const quickStartBtn = document.getElementById('quickStartBtn');
+            if (quickStartBtn) {
+                quickStartBtn.disabled = sessions.length === 0;
+            }
+        }
         
         function startRestTimer(seconds) {
             if (timerInterval) clearInterval(timerInterval);
@@ -1833,6 +2129,7 @@ function toggleSetting(setting) {
             document.getElementById('homeView').style.display = 'block';
             document.getElementById('trainingView').style.display = 'none';
             document.getElementById('settingsView').style.display = 'none';
+
             document.getElementById('headerActions').innerHTML = `
                 <button class="header-btn" onclick="openCreateModal()">
                     + Créer
@@ -1847,7 +2144,7 @@ function toggleSetting(setting) {
                         <div class="empty-state-icon">💪</div>
                         <div class="empty-state-text">Aucune séance créée</div>
                         <div style="margin-top: 10px; color: rgba(255,255,255,0.3); font-size: 14px;">
-                            Clique sur "+ Créer" pour commencer
+                            Clique sur "+ Créer" ou sur "Nouvelle séance" en haut.
                         </div>
                     </div>
                 `;
@@ -1856,37 +2153,38 @@ function toggleSetting(setting) {
                     const history = workoutHistory.filter(h => h.sessionId === session.id);
                     const lastWorkout = history.length > 0 ? new Date(history[0].date).toLocaleDateString('fr-FR') : 'Jamais';
                     
-                return `
-    <div class="session-card">
-        <div class="session-card-content" onclick="openSession('${session.id}')">
-            <div class="session-info">
-                <div class="session-name">${session.name}</div>
-                <div class="session-details">
-                    ${session.exercises.length} exercices • Dernière: ${lastWorkout}
-                </div>
-            </div>
-            <div class="session-arrow">▶</div>
-        </div>
-        <div class="three-dots-menu">
-            <button class="three-dots-btn" onclick="event.stopPropagation(); toggleCardMenu('${session.id}')">⋮</button>
-            <div class="dropdown-card-menu" id="menu-${session.id}">
-                <div class="dropdown-card-item" onclick="event.stopPropagation(); closeCardMenu(); openEditModal('${session.id}')">
-                    ✏️ Modifier
-                </div>
-                <div class="dropdown-card-item" onclick="event.stopPropagation(); closeCardMenu(); exportSession('${session.id}')">
-                    ↑ Exporter
-                </div>
-                <div class="dropdown-card-item delete" onclick="event.stopPropagation(); closeCardMenu(); deleteSession('${session.id}')">
-                    🗑️ Supprimer
-                </div>
-            </div>
-        </div>
-    </div>
-`;
+                    return `
+                        <div class="session-card">
+                            <div class="session-card-content" onclick="openSession('${session.id}')">
+                                <div class="session-info">
+                                    <div class="session-name">${session.name}</div>
+                                    <div class="session-details">
+                                        ${session.exercises.length} exercices • Dernière: ${lastWorkout}
+                                    </div>
+                                </div>
+                                <div class="session-arrow">▶</div>
+                            </div>
+                            <div class="three-dots-menu">
+                                <button class="three-dots-btn" onclick="event.stopPropagation(); toggleCardMenu('${session.id}')">⋮</button>
+                                <div class="dropdown-card-menu" id="menu-${session.id}">
+                                    <div class="dropdown-card-item" onclick="event.stopPropagation(); closeCardMenu(); openEditModal('${session.id}')">
+                                        ✏️ Modifier
+                                    </div>
+                                    <div class="dropdown-card-item" onclick="event.stopPropagation(); closeCardMenu(); exportSession('${session.id}')">
+                                        ↑ Exporter
+                                    </div>
+                                    <div class="dropdown-card-item delete" onclick="event.stopPropagation(); closeCardMenu(); deleteSession('${session.id}')">
+                                        🗑️ Supprimer
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 }).join('');
             }
             
             updateStats();
+            updateHomeHero();
         }
         
         function openSession(sessionId) {
