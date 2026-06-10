@@ -1,11 +1,11 @@
 {
   "name": "IRON TRACK - Suivi Musculation",
   "short_name": "IRON TRACK",
-  "description": "Tracker de musculation pour suivre tes séances et ta progression",
+  "description": "Tracker de musculation avec surcharge progressive automatique, programmes et historique",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#1a1a1a",
-  "theme_color": "#1a1a1a",
+  "background_color": "#070709",
+  "theme_color": "#070709",
   "orientation": "portrait",
   "icons": [
     {
